@@ -14,8 +14,6 @@ from langgraph.prebuilt import ToolNode
 import os
 from enum import Enum
 
-from prompts import get_resume_prompt, get_cover_letter_prompt
-
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -37,7 +35,7 @@ class AgentConfig:
     """Centralized configuration - easier to test and modify"""
     model_name: str = field(default_factory=lambda: os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
     temperature: float = 0.5
-    max_tokens: int = 1000
+    max_tokens: int = 500
     output_dir: Path = field(default_factory=lambda: Path("./outputs"))
     
     def __post_init__(self):
@@ -107,50 +105,3 @@ class DocumentStore:
         """Reset all documents"""
         self._documents.clear()
         self._history.clear()
-
-class DocumentGenerator:
-    """
-    Separated document generation logic - easier to test and extend
-    Could swap out OpenAI for Anthropic, etc.
-    """
-    def __init__(self, config: AgentConfig):
-        self.config = config
-        self.model = ChatOpenAI(
-            model_name=config.model_name,
-            temperature=config.temperature,
-            max_tokens=config.max_tokens
-        )
-    
-    def generate_resume(self, name: str, title: str, summary: str, 
-                       experience: str, education: str, skills: str) -> str:
-        """Generate resume with error handling"""
-        try:
-            prompt = get_resume_prompt(name, title, summary, experience, education, skills)
-            response = self.model.invoke([SystemMessage(content=prompt)])
-            logger.info(f"Generated resume for {name}")
-            return response.content
-        except Exception as e:
-            logger.error(f"Resume generation failed: {e}")
-            raise ValueError(f"Failed to generate resume: {str(e)}")
-    
-    def generate_cover_letter(self, name: str, title: str, summary: str,
-                             experience: str, education: str, skills: str,
-                             job_title: str, company: str, tone: str) -> str:
-        """Generate cover letter with error handling"""
-        try:
-            # Use higher temperature for more creative cover letters
-            creative_model = ChatOpenAI(
-                model_name=self.config.model_name,
-                temperature=0.7,
-                max_tokens=self.config.max_tokens
-            )
-            prompt = get_cover_letter_prompt(
-                name, title, summary, experience, education, skills,
-                job_title, company, tone
-            )
-            response = creative_model.invoke([SystemMessage(content=prompt)])
-            logger.info(f"Generated cover letter for {company}")
-            return response.content
-        except Exception as e:
-            logger.error(f"Cover letter generation failed: {e}")
-            raise ValueError(f"Failed to generate cover letter: {str(e)}")

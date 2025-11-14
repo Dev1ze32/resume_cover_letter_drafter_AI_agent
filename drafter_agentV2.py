@@ -13,8 +13,8 @@ from langgraph.graph import StateGraph, END
 from langgraph.prebuilt import ToolNode
 import os
 
-from prompts import get_main_reply_prompt
-from helper.document_helper import DocumentStore, DocumentType, DocumentGenerator
+from prompts import get_main_reply_prompt, get_resume_prompt, get_cover_letter_prompt
+from helper.document_helper import DocumentStore, DocumentType
 
 
 logging.basicConfig(
@@ -32,7 +32,7 @@ class AgentConfig:
     """Centralized configuration - easier to test and modify"""
     model_name: str = field(default_factory=lambda: os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
     temperature: float = 0.5
-    max_tokens: int = 1000
+    max_tokens: int = 250
     output_dir: Path = field(default_factory=lambda: Path("./outputs"))
     
     def __post_init__(self):
@@ -45,6 +45,53 @@ class AgentState(TypedDict):
     document_store: DocumentStore
     config: AgentConfig
     user_context: dict  # Store user info to avoid re-asking
+
+class DocumentGenerator:
+    """
+    Separated document generation logic - easier to test and extend
+    Could swap out OpenAI for Anthropic, etc.
+    """
+    def __init__(self, config: AgentConfig):
+        self.config = config
+        self.model = ChatOpenAI(
+            model_name=config.model_name,
+            temperature=config.temperature,
+            max_tokens=config.max_tokens
+        )
+    
+    def generate_resume(self, name: str, title: str, summary: str, 
+                       experience: str, education: str, skills: str) -> str:
+        """Generate resume with error handling"""
+        try:
+            prompt = get_resume_prompt(name, title, summary, experience, education, skills)
+            response = self.model.invoke([SystemMessage(content=prompt)])
+            logger.info(f"Generated resume for {name}")
+            return response.content
+        except Exception as e:
+            logger.error(f"Resume generation failed: {e}")
+            raise ValueError(f"Failed to generate resume: {str(e)}")
+    
+    def generate_cover_letter(self, name: str, title: str, summary: str,
+                             experience: str, education: str, skills: str,
+                             job_title: str, company: str, tone: str) -> str:
+        """Generate cover letter with error handling"""
+        try:
+            # Use higher temperature for more creative cover letters
+            creative_model = ChatOpenAI(
+                model_name=self.config.model_name,
+                temperature=0.7,
+                max_tokens=self.config.max_tokens
+            )
+            prompt = get_cover_letter_prompt(
+                name, title, summary, experience, education, skills,
+                job_title, company, tone
+            )
+            response = creative_model.invoke([SystemMessage(content=prompt)])
+            logger.info(f"Generated cover letter for {company}")
+            return response.content
+        except Exception as e:
+            logger.error(f"Cover letter generation failed: {e}")
+            raise ValueError(f"Failed to generate cover letter: {str(e)}")
 
 
 # Tools with dependency injection
@@ -219,11 +266,41 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
         state.setdefault("document_store", document_store)
         state.setdefault("config", config)
         
-        # Get user input
+        messages = state["messages"]
+        
+        # ✅ CHECK: If last message is a ToolMessage, process it first (don't ask for input)
+        if messages and isinstance(messages[-1], ToolMessage):
+            # AI needs to respond to the tool result
+            all_messages = [SystemMessage(content=system_prompt)] + messages
+            
+            try:
+                response = model.invoke(all_messages)
+                
+                if response.content:
+                    print(f"\nAssistant: {response.content}")
+                
+                if hasattr(response, "tool_calls") and response.tool_calls:
+                    tool_names = [tc['name'] for tc in response.tool_calls]
+                    print(f"\nUsing tools: {', '.join(tool_names)}")
+                    logger.info(f"Tools invoked: {tool_names}")
+                
+                state["messages"].append(response)
+                
+            except Exception as e:
+                logger.error(f"Agent node error: {e}")
+                error_msg = AIMessage(content=f"I encountered an error: {str(e)}. Please try again.")
+                state["messages"].append(error_msg)
+                print(f"\nError: {str(e)}")
+            
+            return state
+        
+        # ✅ ONLY ask for input if we're starting a new turn
         user_input = input("\n💬 You: ")
         
-        if user_input.lower() in ['quit', 'exit', 'bye']:
+        if user_input.lower() in ['quit', 'exit', 'bye', 'end']:
             logger.info("User requested exit")
+            print("\n👋 Goodbye! Thanks for using Drafter.")
+            state["_exit_requested"] = True
             return state
         
         user_message = HumanMessage(content=user_input)
@@ -234,41 +311,41 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
         try:
             response = model.invoke(all_messages)
             
-            # Display response
             if response.content:
                 print(f"\nAssistant: {response.content}")
             
-            # Log tool usage
             if hasattr(response, "tool_calls") and response.tool_calls:
                 tool_names = [tc['name'] for tc in response.tool_calls]
                 print(f"\nUsing tools: {', '.join(tool_names)}")
                 logger.info(f"Tools invoked: {tool_names}")
             
-            state["messages"].extend([user_message, response])
+            state["messages"].append(user_message)
+            state["messages"].append(response)
             
         except Exception as e:
             logger.error(f"Agent node error: {e}")
             error_msg = AIMessage(content=f"I encountered an error: {str(e)}. Please try again.")
-            state["messages"].extend([user_message, error_msg])
+            state["messages"].append(user_message)
+            state["messages"].append(error_msg)
             print(f"\nError: {str(e)}")
         
         return state
     
     def route_agent(state: AgentState) -> Literal["use_tools", "continue_chat", "end"]:
         """Intelligent routing based on message history"""
+        
+        # Check exit flag first
+        if state.get("_exit_requested", False):
+            return "end"
+        
         messages = state.get("messages", [])
         
         if not messages:
-            return "end"
+            return "continue_chat"  # Allow first interaction
         
         last_message = messages[-1]
         
-        # Check for exit intent
-        if isinstance(last_message, HumanMessage):
-            if last_message.content.lower() in ['quit', 'exit', 'bye']:
-                return "end"
-        
-        # Route to tools if requested
+        # Route to tools if AI wants to use them
         if hasattr(last_message, 'tool_calls') and last_message.tool_calls:
             return "use_tools"
         

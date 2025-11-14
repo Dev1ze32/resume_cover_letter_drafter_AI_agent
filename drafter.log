@@ -1,0 +1,28 @@
+2025-11-14 23:20:49,304 - __main__ - INFO - Starting Drafter session
+2025-11-14 23:21:13,841 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:21:31,462 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:22:09,389 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:23:37,928 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:24:59,785 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:25:26,492 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:25:26,502 - __main__ - INFO - Tools invoked: ['create_resume']
+2025-11-14 23:25:30,182 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:25:30,183 - __main__ - INFO - Generated resume for Wendell Anciso
+2025-11-14 23:25:30,183 - helper.document_helper - INFO - Created/updated resume v1
+2025-11-14 23:25:34,840 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:25:42,429 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:26:36,302 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:26:36,306 - __main__ - INFO - Tools invoked: ['create_cover_letter']
+2025-11-14 23:26:40,533 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:26:40,536 - __main__ - INFO - Generated cover letter for Jollibee
+2025-11-14 23:26:40,536 - helper.document_helper - INFO - Created/updated cover_letter v1
+2025-11-14 23:26:47,689 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:26:53,516 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:27:02,611 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:27:02,616 - __main__ - INFO - Tools invoked: ['save_documents']
+2025-11-14 23:27:02,619 - __main__ - INFO - Saved resume to outputs\resume_20251114_232702_v1.txt
+2025-11-14 23:27:02,625 - __main__ - INFO - Saved cover_letter to outputs\cover_letter_20251114_232702_v1.txt
+2025-11-14 23:27:06,900 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 23:27:08,459 - __main__ - INFO - User requested exit
+2025-11-14 23:27:15,565 - __main__ - INFO - Session interrupted by user
+2025-11-14 23:27:15,567 - __main__ - INFO - Session ended
