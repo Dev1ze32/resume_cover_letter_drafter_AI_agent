@@ -47,10 +47,6 @@ class AgentState(TypedDict):
     user_context: dict  # Store user info to avoid re-asking
 
 class DocumentGenerator:
-    """
-    Separated document generation logic - easier to test and extend
-    Could swap out OpenAI for Anthropic, etc.
-    """
     def __init__(self, config: AgentConfig):
         self.config = config
         self.model = ChatOpenAI(
@@ -60,10 +56,10 @@ class DocumentGenerator:
         )
     
     def generate_resume(self, name: str, title: str, summary: str, 
-                       experience: str, education: str, skills: str) -> str:
+                       experience: str, education: str, skills: str, certifications:Optional[str] = None, portfolio:Optional[str] = None) -> str:
         """Generate resume with error handling"""
         try:
-            prompt = get_resume_prompt(name, title, summary, experience, education, skills)
+            prompt = get_resume_prompt(name, title, summary, experience, education, skills, certifications, portfolio)
             response = self.model.invoke([SystemMessage(content=prompt)])
             logger.info(f"Generated resume for {name}")
             return response.content
@@ -101,12 +97,13 @@ def create_tools(document_store: DocumentStore, generator: DocumentGenerator, co
     @tool(description="""
         Generate a professional resume draft based on the user's background.
         Requires: name, title, summary, experience, education, and skills.
+        optional: portfolio and certification (if they dont have then just proceed)
         Returns: Formatted resume with version tracking.
     """)
     def create_resume(name: str, title: str, summary: str, experience: str, 
-                     education: str, skills: str) -> str:
+                     education: str, skills: str, certifications:Optional[str] = None, portfolio:Optional[str] = None) -> str:
         try:
-            content = generator.generate_resume(name, title, summary, experience, education, skills)
+            content = generator.generate_resume(name, title, summary, experience, education, skills, certifications, portfolio)
             metadata = document_store.create(DocumentType.RESUME, content)
             
             return (
@@ -148,11 +145,11 @@ def create_tools(document_store: DocumentStore, generator: DocumentGenerator, co
             return f"✗ Error creating cover letter: {str(e)}"
     
     @tool(description="""
-        Save documents to files with automatic naming and versioning.
+        Save documents to DOCX files with automatic naming and versioning.
         Supports: resume, cover_letter, or both (if both exist).
     """)
     def save_documents(document_types: Optional[list[str]] = None) -> str:
-        """Save with smart defaults and better feedback"""
+        """Save documents as DOCX files with smart defaults and better feedback"""
         try:
             if document_types is None:
                 # Save all existing documents
@@ -172,10 +169,13 @@ def create_tools(document_store: DocumentStore, generator: DocumentGenerator, co
                     if not metadata:
                         continue
                     
-                    filename = f"{doc_type.value}_{timestamp}_v{metadata.version}.txt"
+                    # Change extension to .docx
+                    filename = f"{doc_type.value}_{timestamp}_v{metadata.version}.docx"
                     filepath = config.output_dir / filename
                     
-                    filepath.write_text(metadata.content, encoding='utf-8')
+                    # Use the new DOCX save function
+                    DocumentStore.save_to_docx(metadata.content, filepath, doc_type)
+                    
                     saved.append(f"{doc_type.value.title()} → {filepath}")
                     logger.info(f"Saved {doc_type.value} to {filepath}")
                     
@@ -185,7 +185,7 @@ def create_tools(document_store: DocumentStore, generator: DocumentGenerator, co
             if not saved:
                 return "✗ No valid documents found to save."
             
-            return "✓ Saved Successfully:\n  • " + "\n  • ".join(saved)
+            return "✓ Saved Successfully (DOCX format):\n  • " + "\n  • ".join(saved)
             
         except Exception as e:
             logger.error(f"save_documents failed: {e}")
@@ -268,34 +268,33 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
         
         messages = state["messages"]
         
-        # ✅ CHECK: If last message is a ToolMessage, process it first (don't ask for input)
+        # If last message is a ToolMessage, AI responds without asking for input
         if messages and isinstance(messages[-1], ToolMessage):
-            # AI needs to respond to the tool result
             all_messages = [SystemMessage(content=system_prompt)] + messages
             
             try:
                 response = model.invoke(all_messages)
                 
-                if response.content:
+                # Only print if there's actual content
+                if response.content and response.content.strip():
                     print(f"\nAssistant: {response.content}")
-                
-                if hasattr(response, "tool_calls") and response.tool_calls:
-                    tool_names = [tc['name'] for tc in response.tool_calls]
-                    print(f"\nUsing tools: {', '.join(tool_names)}")
-                    logger.info(f"Tools invoked: {tool_names}")
                 
                 state["messages"].append(response)
                 
             except Exception as e:
-                logger.error(f"Agent node error: {e}")
+                logger.error(f"Agent node error after tool: {e}")
                 error_msg = AIMessage(content=f"I encountered an error: {str(e)}. Please try again.")
                 state["messages"].append(error_msg)
                 print(f"\nError: {str(e)}")
             
             return state
         
-        # ✅ ONLY ask for input if we're starting a new turn
-        user_input = input("\n💬 You: ")
+        # Get user input
+        user_input = input("\n💬 You: ").strip()
+        
+        # Handle empty input
+        if not user_input:
+            return state
         
         if user_input.lower() in ['quit', 'exit', 'bye', 'end']:
             logger.info("User requested exit")
@@ -304,19 +303,18 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
             return state
         
         user_message = HumanMessage(content=user_input)
-        
-        # Build context-aware messages
         all_messages = [SystemMessage(content=system_prompt)] + state["messages"] + [user_message]
         
         try:
             response = model.invoke(all_messages)
             
-            if response.content:
+            # Only print if there's actual content
+            if response.content and response.content.strip():
                 print(f"\nAssistant: {response.content}")
             
             if hasattr(response, "tool_calls") and response.tool_calls:
                 tool_names = [tc['name'] for tc in response.tool_calls]
-                print(f"\nUsing tools: {', '.join(tool_names)}")
+                print(f"\n🔧 Calling tools: {', '.join(tool_names)}")
                 logger.info(f"Tools invoked: {tool_names}")
             
             state["messages"].append(user_message)
@@ -336,33 +334,38 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
         
         # Check exit flag first
         if state.get("_exit_requested", False):
+            logger.info("Routing to END (exit requested)")
             return "end"
         
         messages = state.get("messages", [])
         
         if not messages:
-            return "continue_chat"  # Allow first interaction
+            logger.info("No messages, routing to continue_chat")
+            return "continue_chat"
         
         last_message = messages[-1]
+        logger.info(f"Last message type: {type(last_message).__name__}")
         
         # Route to tools if AI wants to use them
-        if hasattr(last_message, 'tool_calls') and last_message.tool_calls:
-            return "use_tools"
+        if isinstance(last_message, AIMessage):
+            # Check if tool_calls exists AND is not empty
+            tool_calls = getattr(last_message, 'tool_calls', None)
+            has_tool_calls = tool_calls is not None and len(tool_calls) > 0
+            logger.info(f"AIMessage has tool_calls: {tool_calls}")
+            
+            if has_tool_calls:
+                tool_names = [tc.get('name', 'unknown') if isinstance(tc, dict) else tc['name'] for tc in tool_calls]
+                logger.info(f"ROUTING TO TOOLS: {tool_names}")
+                return "use_tools"
         
+        # If last message is ToolMessage, go back to agent to respond
+        if isinstance(last_message, ToolMessage):
+            logger.info("ROUTING BACK TO AGENT (after tool execution)")
+            return "continue_chat"
+        
+        # Otherwise continue normal chat (ask for input)
+        logger.info("ROUTING TO CONTINUE_CHAT (normal flow)")
         return "continue_chat"
-    
-    def route_tools(state: AgentState) -> Literal["continue", "end"]:
-        """Check if workflow should end after tool execution"""
-        messages = state.get("messages", [])
-        
-        # Look for save confirmation in recent tool results
-        for message in reversed(messages[-3:]):
-            if isinstance(message, ToolMessage):
-                if "saved successfully" in message.content.lower():
-                    # Ask user if they want to continue
-                    return "continue"  # Let them decide
-        
-        return "continue"
     
     # Build graph
     graph = StateGraph(AgentState)
@@ -382,14 +385,8 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
         }
     )
     
-    graph.add_conditional_edges(
-        "tools",
-        route_tools,
-        {
-            "continue": "agent",
-            "end": END
-        }
-    )
+    # After tools execute, ALWAYS go back to agent
+    graph.add_edge("tools", "agent")
     
     return graph.compile()
 

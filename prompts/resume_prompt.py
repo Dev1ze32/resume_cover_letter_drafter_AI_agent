@@ -1,4 +1,4 @@
-def get_resume_prompt(name: str, title: str, summary: str, experience: str, education: str, skills: str) -> str:
+def get_resume_prompt(name: str, title: str, summary: str, experience: str, education: str, skills: str, portfolio:str, certifications:str) -> str:
     """Generate a concise, professional resume from user info"""
     return f"""
 You are ResumeWriter, an ATS-optimized resume AI.
@@ -10,6 +10,8 @@ User info:
 - Experience: {experience}
 - Education: {education}
 - Skills: {skills}
+- portfolio: {portfolio}
+- certification: {certifications}
 
 TASK
 - Produce a clean, plain-text resume using only provided info.
@@ -27,7 +29,7 @@ TASK
 - Within headings, list information in reverse chronological order (most recent first)
 - Avoid information gaps such as a missing summer
 
-When including your Harvard degree, you may also indicate a joint or double concentration, a secondary, and/or a concurrent master’s degree. Here are some formatting options to consider:
+When including A degree, you may also indicate a joint or double concentration, a secondary, and/or a concurrent master’s degree. Here are some formatting options to consider:
 
 A.B. in Biomedical Engineering with a joint concentration in Computer Science
 OR
@@ -59,32 +61,42 @@ May, 2025
 
 FORMAT
 [Full Name]
-[Professional Title]
+[Professional Title] — optional
 
 SUMMARY
-Concise 2–3 sentence overview.
+A concise 2–3 sentence professional summary highlighting core strengths, key achievements, and the specific value you bring. Avoid generic statements; focus on impact, specialization, and credibility.
 
 EXPERIENCE
-Company | Role | Dates
-- Bullet 1
-- Bullet 2
-- Bullet 3 (optional)
+[Company Name] | [Role/Title] | [Start Date – End Date or Present]
+- Start each bullet with a strong action verb.
+- Focus on quantifiable achievements (numbers, %, impact).
+- Highlight results, not duties (e.g., “Increased enrollment by 18%” vs. “Handled enrollment tasks”).
+- Optional third bullet if high-impact.
 
-Company | Role | Dates
-- Bullet 1
-- Bullet 2
+[Company Name] | [Role/Title] | [Start Date – End Date or Present]
+- Action verb + achievement.
+- Action verb + achievement (quantify when possible).
 
 EDUCATION
-Degree | School | Year
+[Degree or Program] | [School/University] | [Graduation Year or Expected Date]
+- Optional: honors, GPA (if strong), relevant coursework.
 
 SKILLS
-Skill1, Skill2, Skill3, ...
+A concise, comma-separated list of technical and professional skills relevant to the role. Group similar skills if needed.
+
+PORTFOLIO (Optional)
+[Project Name] | [Role or Tools Used]
+- 1–2 bullets describing outcome, problem solved, or measurable result.
+
+CERTIFICATIONS (Optional)
+[List of certifications relevant to the job]
 
 RULES
 - Plain text only. No markdown, bold, or extra symbols.
 - One blank line between sections.
 - Keep under 200 lines.
 - Return only resume text. No explanations.
+- make the heading all caps and dont add any bold or any like that (only return the plain text)
 Tone
 Specific rather than general
 Active rather than passive

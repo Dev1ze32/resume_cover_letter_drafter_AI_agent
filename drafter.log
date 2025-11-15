@@ -1,28 +1,218 @@
-2025-11-14 23:20:49,304 - __main__ - INFO - Starting Drafter session
-2025-11-14 23:21:13,841 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:21:31,462 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:22:09,389 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:23:37,928 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:24:59,785 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:25:26,492 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:25:26,502 - __main__ - INFO - Tools invoked: ['create_resume']
-2025-11-14 23:25:30,182 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:25:30,183 - __main__ - INFO - Generated resume for Wendell Anciso
-2025-11-14 23:25:30,183 - helper.document_helper - INFO - Created/updated resume v1
-2025-11-14 23:25:34,840 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:25:42,429 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:26:36,302 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:26:36,306 - __main__ - INFO - Tools invoked: ['create_cover_letter']
-2025-11-14 23:26:40,533 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:26:40,536 - __main__ - INFO - Generated cover letter for Jollibee
-2025-11-14 23:26:40,536 - helper.document_helper - INFO - Created/updated cover_letter v1
-2025-11-14 23:26:47,689 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:26:53,516 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:27:02,611 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:27:02,616 - __main__ - INFO - Tools invoked: ['save_documents']
-2025-11-14 23:27:02,619 - __main__ - INFO - Saved resume to outputs\resume_20251114_232702_v1.txt
-2025-11-14 23:27:02,625 - __main__ - INFO - Saved cover_letter to outputs\cover_letter_20251114_232702_v1.txt
-2025-11-14 23:27:06,900 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2025-11-14 23:27:08,459 - __main__ - INFO - User requested exit
-2025-11-14 23:27:15,565 - __main__ - INFO - Session interrupted by user
-2025-11-14 23:27:15,567 - __main__ - INFO - Session ended
+2025-11-15 20:02:40,764 - __main__ - INFO - Starting Drafter session
+2025-11-15 20:02:53,168 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:04:27,612 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:04:59,593 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2025-11-15 20:04:59,594 - __main__ - ERROR - Agent node error: Error code: 400 - {'error': {'message': "An assistant message with 'tool_calls' must be followed by tool messages responding to each 'tool_call_id'. The following tool_call_ids did not have response messages: call_hlWx8uzvpnghWnGJzR2CpMym", 'type': 'invalid_request_error', 'param': 'messages.[5].role', 'code': None}}
+2025-11-15 20:08:45,289 - __main__ - INFO - Session interrupted by user
+2025-11-15 20:08:45,290 - __main__ - INFO - Session ended
+2025-11-15 20:08:54,086 - __main__ - INFO - Starting Drafter session
+2025-11-15 20:09:01,268 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:09:05,962 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:10:23,786 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:10:33,147 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2025-11-15 20:10:33,149 - __main__ - ERROR - Agent node error: Error code: 400 - {'error': {'message': "An assistant message with 'tool_calls' must be followed by tool messages responding to each 'tool_call_id'. The following tool_call_ids did not have response messages: call_XMl0NP2w0Ksz5NfwU1M7Vqya", 'type': 'invalid_request_error', 'param': 'messages.[7].role', 'code': None}}
+2025-11-15 20:12:53,625 - __main__ - INFO - Session interrupted by user
+2025-11-15 20:12:53,626 - __main__ - INFO - Session ended
+2025-11-15 20:13:06,022 - __main__ - INFO - Starting Drafter session
+2025-11-15 20:13:17,640 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:13:17,652 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:13:17,653 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:17:47,770 - __main__ - INFO - Session interrupted by user
+2025-11-15 20:17:47,771 - __main__ - INFO - Session ended
+2025-11-15 20:17:58,440 - __main__ - INFO - Starting Drafter session
+2025-11-15 20:18:06,267 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:18:06,277 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:18:06,277 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:18:06,278 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:18:26,410 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:18:26,412 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:18:26,412 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:18:26,413 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:18:27,282 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:18:27,287 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:18:27,287 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:18:27,287 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:18:27,289 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:18:27,289 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:18:27,289 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:18:28,186 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:18:28,188 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:18:28,189 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:18:28,189 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:18:29,009 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:18:29,014 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:18:29,014 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:18:29,015 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:18:30,516 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:18:30,525 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:18:30,526 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:18:30,526 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:18:30,527 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:18:30,527 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:18:30,528 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:18:32,107 - __main__ - INFO - Session interrupted by user
+2025-11-15 20:18:32,109 - __main__ - INFO - Session ended
+2025-11-15 20:19:21,943 - __main__ - INFO - Starting Drafter session
+2025-11-15 20:19:29,520 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:19:29,533 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:19:29,533 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:19:29,533 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:19:38,371 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:19:38,374 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:19:38,374 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:19:38,374 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:19:53,077 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:19:53,081 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:19:53,082 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:19:53,082 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:19:59,655 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:19:59,663 - __main__ - INFO - Tools invoked: ['create_resume']
+2025-11-15 20:19:59,664 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:19:59,664 - __main__ - INFO - AIMessage has tool_calls: [{'name': 'create_resume', 'args': {'name': 'Dell', 'title': 'Software Developer', 'summary': 'Detail-oriented and innovative Software Developer with hands-on experience in AI and automation. Proven ability to develop effective sales bots and enhance user engagement through prompt engineering during an internship at Sofi AI. Adept in Python programming and passionate about leveraging technology to solve complex problems. Recent graduate with a Bachelor of Science in Computer Engineering from the University of Cabuyao.', 'experience': 'Intern at Sofi AI as a Prompt Engineer and Sales Bot Developer', 'education': 'Bachelor of Science in Computer Engineering, University of Cabuyao, 2025', 'skills': 'AI, Automation, Python'}, 'id': 'call_0byRE96g8NuA3jyelbvy4xZ6', 'type': 'tool_call'}]
+2025-11-15 20:19:59,665 - __main__ - INFO - ROUTING TO TOOLS: ['create_resume']
+2025-11-15 20:20:04,507 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:20:04,510 - __main__ - INFO - Generated resume for Dell
+2025-11-15 20:20:04,510 - helper.document_helper - INFO - Created/updated resume v1
+2025-11-15 20:20:07,673 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:20:07,680 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:20:07,680 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:20:07,680 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:20:14,423 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:20:14,433 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:20:14,433 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:20:14,434 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 20:20:33,239 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:20:33,247 - __main__ - INFO - Tools invoked: ['save_documents']
+2025-11-15 20:20:33,248 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:20:33,248 - __main__ - INFO - AIMessage has tool_calls: [{'name': 'save_documents', 'args': {'document_types': ['resume']}, 'id': 'call_DQCHvJOAN03tEFoq6DKKc1y7', 'type': 'tool_call'}]
+2025-11-15 20:20:33,248 - __main__ - INFO - ROUTING TO TOOLS: ['save_documents']
+2025-11-15 20:20:33,343 - helper.document_helper - INFO - Saved DOCX to outputs\resume_20251115_202033_v1.docx
+2025-11-15 20:20:33,344 - __main__ - INFO - Saved resume to outputs\resume_20251115_202033_v1.docx
+2025-11-15 20:20:35,380 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 20:20:35,385 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 20:20:35,385 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 20:20:35,386 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:00:56,575 - __main__ - INFO - Session interrupted by user
+2025-11-15 23:00:56,585 - __main__ - INFO - Session ended
+2025-11-15 23:01:29,709 - __main__ - INFO - Starting Drafter session
+2025-11-15 23:01:41,301 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:01:41,318 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:01:41,318 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:01:41,318 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:03:58,520 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:03:58,526 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:03:58,526 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:03:58,526 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:05:12,061 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:05:12,064 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:05:12,064 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:05:12,065 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:05:44,743 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:05:44,750 - __main__ - INFO - Tools invoked: ['create_resume']
+2025-11-15 23:05:44,750 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:05:44,751 - __main__ - INFO - AIMessage has tool_calls: [{'name': 'create_resume', 'args': {'name': 'Wendell Anciso', 'title': 'Software Developer', 'summary': 'Motivated and detail-oriented software developer with hands-on experience in prompt engineering and sales bot building during an internship at Sofi AI. Proficient in AI and automation, utilizing Python and n8n to develop innovative solutions. Currently pursuing a Bachelor of Science in Computer Engineering, expected to graduate in 2026. Committed to continuous learning and enhancing technical skills, with a foundational certification in Java from Codecademy.', 'experience': 'Intern at Sofi AI (3 months in 2025): Fixed sales bot using prompt engineering.', 'education': 'University of Cabuyao, Bachelor of Science in Computer Engineering, expected graduation 2026', 'skills': 'Python, n8n, AI and automation', 'certifications': 'Certification of completion in Java with Codecademy, 2013', 'portfolio': None}, 'id': 'call_MPtoMKSVdHwW9Ukx12bU9egk', 'type': 'tool_call'}]
+2025-11-15 23:05:44,752 - __main__ - INFO - ROUTING TO TOOLS: ['create_resume']
+2025-11-15 23:05:50,759 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:05:50,761 - __main__ - INFO - Generated resume for Wendell Anciso
+2025-11-15 23:05:50,761 - helper.document_helper - INFO - Created/updated resume v1
+2025-11-15 23:05:52,054 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:05:52,058 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:05:52,058 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:05:52,058 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:06:01,249 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:06:01,253 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:06:01,253 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:06:01,254 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:06:16,128 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:06:16,132 - __main__ - INFO - Tools invoked: ['save_documents']
+2025-11-15 23:06:16,133 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:06:16,133 - __main__ - INFO - AIMessage has tool_calls: [{'name': 'save_documents', 'args': {'document_types': ['resume']}, 'id': 'call_wtUp0Axd2QZymoJySsTwCNgv', 'type': 'tool_call'}]
+2025-11-15 23:06:16,133 - __main__ - INFO - ROUTING TO TOOLS: ['save_documents']
+2025-11-15 23:06:16,186 - helper.document_helper - INFO - Saved DOCX to outputs\resume_20251115_230616_v1.docx
+2025-11-15 23:06:16,186 - __main__ - INFO - Saved resume to outputs\resume_20251115_230616_v1.docx
+2025-11-15 23:06:18,129 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:06:18,132 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:06:18,132 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:06:18,132 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:14:33,388 - __main__ - INFO - Session interrupted by user
+2025-11-15 23:14:33,390 - __main__ - INFO - Session ended
+2025-11-15 23:15:23,244 - __main__ - INFO - Starting Drafter session
+2025-11-15 23:15:32,128 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:15:32,141 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:15:32,141 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:15:32,141 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:17:09,681 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:17:09,687 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:17:09,687 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:17:09,687 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:17:54,284 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:17:54,288 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:17:54,288 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:17:54,289 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:18:16,677 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 400 Bad Request"
+2025-11-15 23:18:16,679 - __main__ - ERROR - Agent node error: Error code: 400 - {'error': {'message': "An assistant message with 'tool_calls' must be followed by tool messages responding to each 'tool_call_id'. The following tool_call_ids did not have response messages: call_tbbHQSH65PeW2M9nJrVEbfrh", 'type': 'invalid_request_error', 'param': 'messages.[7].role', 'code': None}}
+2025-11-15 23:18:16,680 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:18:16,680 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:18:16,680 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:23:04,045 - __main__ - INFO - Session interrupted by user
+2025-11-15 23:23:04,046 - __main__ - INFO - Session ended
+2025-11-15 23:23:14,097 - __main__ - INFO - Starting Drafter session
+2025-11-15 23:23:21,927 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:23:21,938 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:23:21,938 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:23:21,938 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:23:40,370 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:23:40,374 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:23:40,374 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:23:40,374 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:23:58,178 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:23:58,184 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:23:58,184 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:23:58,184 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:24:35,304 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:24:35,312 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:24:35,312 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:24:35,313 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:24:42,927 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:24:42,931 - __main__ - INFO - Tools invoked: ['create_resume']
+2025-11-15 23:24:42,932 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:24:42,932 - __main__ - INFO - AIMessage has tool_calls: [{'name': 'create_resume', 'args': {'name': 'Wendell Anciso', 'title': 'Software Developer', 'summary': 'Detail-oriented and motivated software developer with hands-on experience in artificial intelligence and automation. Proven ability to design and build sales bots as an intern at Sofi AI, where I honed my skills in prompt engineering and Python programming. Eager to leverage technical expertise in a challenging software development role.', 'experience': 'Intern at Sofi AI (August 2025 - November 2025) - Role: Sales Bot Builder and Prompt Engineer', 'education': 'Pamantasan ng Cabuyao - Bachelor of Science in Computer Engineering (BSCPE), Graduation Year: 2025', 'skills': 'AI and Automation, Python, Apps Script, Excel'}, 'id': 'call_8qJbfjNUiOfSFT1QOgzOA1Hl', 'type': 'tool_call'}]
+2025-11-15 23:24:42,933 - __main__ - INFO - ROUTING TO TOOLS: ['create_resume']
+2025-11-15 23:24:48,914 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:24:48,917 - __main__ - INFO - Generated resume for Wendell Anciso
+2025-11-15 23:24:48,917 - helper.document_helper - INFO - Created/updated resume v1
+2025-11-15 23:24:54,544 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:24:54,550 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:24:54,550 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:24:54,550 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:25:13,967 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:25:13,975 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:25:13,975 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:25:13,975 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:25:37,055 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:25:37,059 - __main__ - INFO - Tools invoked: ['create_cover_letter']
+2025-11-15 23:25:37,060 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:25:37,060 - __main__ - INFO - AIMessage has tool_calls: [{'name': 'create_cover_letter', 'args': {'name': 'Wendell Anciso', 'title': 'Software Developer', 'summary': 'Detail-oriented and motivated software developer with hands-on experience in artificial intelligence and automation. Proven ability to design and build sales bots as an intern at Sofi AI, where I honed my skills in prompt engineering and Python programming. Eager to leverage technical expertise in a challenging software development role.', 'experience': 'Intern at Sofi AI (August 2025 - November 2025) - Role: Sales Bot Builder and Prompt Engineer', 'education': 'Pamantasan ng Cabuyao - Bachelor of Science in Computer Engineering (BSCPE), Graduation Year: 2025', 'skills': 'AI and Automation, Python, Apps Script, Excel', 'job_title': 'Software Developer', 'company': 'Google', 'tone': 'professional'}, 'id': 'call_Y6IVfOUeOVT4MTWJcsoYXih3', 'type': 'tool_call'}]
+2025-11-15 23:25:37,061 - __main__ - INFO - ROUTING TO TOOLS: ['create_cover_letter']
+2025-11-15 23:25:42,803 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:25:42,804 - __main__ - INFO - Generated cover letter for Google
+2025-11-15 23:25:42,805 - helper.document_helper - INFO - Created/updated cover_letter v1
+2025-11-15 23:25:48,515 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:25:48,519 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:25:48,519 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:25:48,519 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:25:56,885 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:25:56,888 - __main__ - INFO - Tools invoked: ['save_documents', 'save_documents']
+2025-11-15 23:25:56,889 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:25:56,889 - __main__ - INFO - AIMessage has tool_calls: [{'name': 'save_documents', 'args': {'document_types': ['resume']}, 'id': 'call_p37A6TTwkm7VMQvv0NgdUq8v', 'type': 'tool_call'}, {'name': 'save_documents', 'args': {'document_types': ['cover_letter']}, 'id': 'call_cb0qoIhWcik0RHHoqRRLBu7P', 'type': 'tool_call'}]
+2025-11-15 23:25:56,890 - __main__ - INFO - ROUTING TO TOOLS: ['save_documents', 'save_documents']
+2025-11-15 23:25:56,949 - helper.document_helper - INFO - Saved DOCX to outputs\resume_20251115_232556_v1.docx
+2025-11-15 23:25:56,949 - helper.document_helper - INFO - Saved DOCX to outputs\cover_letter_20251115_232556_v1.docx
+2025-11-15 23:25:56,949 - __main__ - INFO - Saved resume to outputs\resume_20251115_232556_v1.docx
+2025-11-15 23:25:56,950 - __main__ - INFO - Saved cover_letter to outputs\cover_letter_20251115_232556_v1.docx
+2025-11-15 23:25:59,248 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-15 23:25:59,250 - __main__ - INFO - Last message type: AIMessage
+2025-11-15 23:25:59,250 - __main__ - INFO - AIMessage has tool_calls: []
+2025-11-15 23:25:59,251 - __main__ - INFO - ROUTING TO CONTINUE_CHAT (normal flow)
+2025-11-15 23:28:27,188 - __main__ - INFO - Session interrupted by user
+2025-11-15 23:28:27,189 - __main__ - INFO - Session ended
