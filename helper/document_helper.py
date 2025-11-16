@@ -4,21 +4,13 @@ from datetime import datetime
 from pathlib import Path
 from docx.shared import Pt, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-import logging
 import os
 from enum import Enum
 from docx import Document
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('drafter.log'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
+from helper.logger_config import get_logger
+
+logger = get_logger(__name__)
 
 class DocumentType(Enum):
     """Enum for document types - more maintainable than strings"""

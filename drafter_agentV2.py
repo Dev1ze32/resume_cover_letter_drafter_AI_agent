@@ -2,7 +2,6 @@ from typing import Annotated, TypedDict, Sequence, Optional, Literal
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-import logging
 
 from dotenv import load_dotenv
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, SystemMessage, ToolMessage
@@ -15,24 +14,16 @@ import os
 
 from prompts import get_main_reply_prompt, get_resume_prompt, get_cover_letter_prompt
 from helper.document_helper import DocumentStore, DocumentType
+from helper.logger_config import get_logger
 
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('drafter.log'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 @dataclass
 class AgentConfig:
     """Centralized configuration - easier to test and modify"""
     model_name: str = field(default_factory=lambda: os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
     temperature: float = 0.5
-    max_tokens: int = 250
+    max_tokens: int = 500
     output_dir: Path = field(default_factory=lambda: Path("./outputs"))
     
     def __post_init__(self):
@@ -55,11 +46,11 @@ class DocumentGenerator:
             max_tokens=config.max_tokens
         )
     
-    def generate_resume(self, name: str, title: str, summary: str, 
-                       experience: str, education: str, skills: str, certifications:Optional[str] = None, portfolio:Optional[str] = None) -> str:
+    def generate_resume(self, name: str, title: str, summary: str, experience: str, education: str, skills: str,
+                       job_description: str, phone: str, linkedin_url: str, portfolio:Optional[str] = None, certifications:Optional[str] = None) -> str:
         """Generate resume with error handling"""
         try:
-            prompt = get_resume_prompt(name, title, summary, experience, education, skills, certifications, portfolio)
+            prompt = get_resume_prompt(name, title, summary, experience, education, skills, certifications, portfolio, job_description, phone, linkedin_url)
             response = self.model.invoke([SystemMessage(content=prompt)])
             logger.info(f"Generated resume for {name}")
             return response.content
@@ -96,14 +87,34 @@ def create_tools(document_store: DocumentStore, generator: DocumentGenerator, co
     
     @tool(description="""
         Generate a professional resume draft based on the user's background.
-        Requires: name, title, summary, experience, education, and skills.
-        optional: portfolio and certification (if they dont have then just proceed)
-        Returns: Formatted resume with version tracking.
+        
+        Required parameters:
+        - name: Full name
+        - title: Job title/role
+        - summary: Professional summary/background overview
+        - experience: Work history with roles, companies, dates, and achievements
+        - education: Degrees, schools, graduation dates
+        - skills: Comma-separated list of technical/professional skills
+        - job_description: Full text of the target job posting for ATS optimization
+        - phone: Phone number
+        - linkedin_url: LinkedIn profile URL
+        
+        Optional parameters:
+        - portfolio: Portfolio or GitHub URL (default: None)
+        - certifications: Professional certifications (default: None)
+        
+        Returns: Formatted resume with version tracking and preview.
     """)
     def create_resume(name: str, title: str, summary: str, experience: str, 
-                     education: str, skills: str, certifications:Optional[str] = None, portfolio:Optional[str] = None) -> str:
+                     education: str, skills: str, job_description: str, 
+                     phone: str, linkedin_url: str, 
+                     portfolio: Optional[str] = None, 
+                     certifications: Optional[str] = None) -> str:
         try:
-            content = generator.generate_resume(name, title, summary, experience, education, skills, certifications, portfolio)
+            content = generator.generate_resume(
+                name, title, summary, experience, education, skills, 
+                certifications, portfolio, job_description, phone, linkedin_url
+            )
             metadata = document_store.create(DocumentType.RESUME, content)
             
             return (
@@ -119,8 +130,21 @@ def create_tools(document_store: DocumentStore, generator: DocumentGenerator, co
     
     @tool(description="""
         Write a personalized cover letter tailored to a specific job.
-        Requires: name, title, summary, experience, education, skills, job_title, company, tone.
-        Tone options: professional, enthusiastic, formal, creative.
+        
+        Required parameters:
+        - name: Full name
+        - title: Current job title/role
+        - summary: Professional summary
+        - experience: Work history
+        - education: Educational background
+        - skills: Relevant skills
+        - job_title: Target position title
+        - company: Target company name
+        - tone: Writing style (default: "professional")
+        
+        Tone options: professional, enthusiastic, formal, creative
+        
+        Returns: Formatted cover letter with version tracking and preview.
     """)
     def create_cover_letter(name: str, title: str, summary: str, experience: str,
                            education: str, skills: str, job_title: str, 
@@ -146,7 +170,12 @@ def create_tools(document_store: DocumentStore, generator: DocumentGenerator, co
     
     @tool(description="""
         Save documents to DOCX files with automatic naming and versioning.
-        Supports: resume, cover_letter, or both (if both exist).
+        
+        Parameters:
+        - document_types: Optional list of document types to save ['resume', 'cover_letter']
+                         If None, saves all existing documents
+        
+        Returns: Success message with file paths.
     """)
     def save_documents(document_types: Optional[list[str]] = None) -> str:
         """Save documents as DOCX files with smart defaults and better feedback"""
@@ -169,11 +198,9 @@ def create_tools(document_store: DocumentStore, generator: DocumentGenerator, co
                     if not metadata:
                         continue
                     
-                    # Change extension to .docx
                     filename = f"{doc_type.value}_{timestamp}_v{metadata.version}.docx"
                     filepath = config.output_dir / filename
                     
-                    # Use the new DOCX save function
                     DocumentStore.save_to_docx(metadata.content, filepath, doc_type)
                     
                     saved.append(f"{doc_type.value.title()} → {filepath}")
@@ -193,8 +220,12 @@ def create_tools(document_store: DocumentStore, generator: DocumentGenerator, co
     
     @tool(description="""
         Update an existing document with new content.
-        Preserves version history and tracks changes.
-        document_type: 'resume' or 'cover_letter'
+        
+        Parameters:
+        - document_type: Type of document to update ('resume' or 'cover_letter')
+        - content: Complete updated content (not just the changes)
+        
+        Returns: Update confirmation with version history.
     """)
     def update_document(document_type: str, content: str) -> str:
         try:
@@ -218,7 +249,14 @@ def create_tools(document_store: DocumentStore, generator: DocumentGenerator, co
             logger.error(f"update_document failed: {e}")
             return f"✗ Error updating document: {str(e)}"
     
-    @tool(description="Preview the current version of a document without saving")
+    @tool(description="""
+        Preview the current version of a document without saving to file.
+        
+        Parameters:
+        - document_type: Type of document to preview ('resume' or 'cover_letter')
+        
+        Returns: Full document content with metadata.
+    """)
     def preview_document(document_type: str) -> str:
         try:
             doc_type = DocumentType(document_type)
@@ -268,6 +306,13 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
         
         messages = state["messages"]
         
+        # DEBUG: Log current message state
+        logger.info(f"=== AGENT NODE - Current messages count: {len(messages)} ===")
+        for i, msg in enumerate(messages[-5:]):  # Last 5 messages
+            msg_type = type(msg).__name__
+            has_tools = hasattr(msg, 'tool_calls') and msg.tool_calls
+            logger.info(f"  [{i}] {msg_type} - has_tool_calls: {has_tools}")
+        
         # If last message is a ToolMessage, AI responds without asking for input
         if messages and isinstance(messages[-1], ToolMessage):
             all_messages = [SystemMessage(content=system_prompt)] + messages
@@ -279,15 +324,14 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
                 if response.content and response.content.strip():
                     print(f"\nAssistant: {response.content}")
                 
-                state["messages"].append(response)
+                # Important: Only append AIMessage, not ToolMessages again
+                return {"messages": [response]}
                 
             except Exception as e:
                 logger.error(f"Agent node error after tool: {e}")
                 error_msg = AIMessage(content=f"I encountered an error: {str(e)}. Please try again.")
-                state["messages"].append(error_msg)
                 print(f"\nError: {str(e)}")
-            
-            return state
+                return {"messages": [error_msg]}
         
         # Get user input
         user_input = input("\n💬 You: ").strip()
@@ -303,10 +347,20 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
             return state
         
         user_message = HumanMessage(content=user_input)
-        all_messages = [SystemMessage(content=system_prompt)] + state["messages"] + [user_message]
+        all_messages = [SystemMessage(content=system_prompt)] + messages + [user_message]
         
         try:
             response = model.invoke(all_messages)
+            
+            # DEBUG: What did the model return?
+            logger.info(f"=== MODEL RESPONSE DEBUG ===")
+            logger.info(f"Response content: {response.content[:200] if response.content else 'EMPTY'}")
+            logger.info(f"Has tool_calls attr: {hasattr(response, 'tool_calls')}")
+            if hasattr(response, 'tool_calls'):
+                logger.info(f"Tool calls value: {response.tool_calls}")
+                logger.info(f"Tool calls type: {type(response.tool_calls)}")
+                logger.info(f"Tool calls length: {len(response.tool_calls) if response.tool_calls else 0}")
+            logger.info(f"=== END DEBUG ===")
             
             # Only print if there's actual content
             if response.content and response.content.strip():
@@ -317,17 +371,14 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
                 print(f"\n🔧 Calling tools: {', '.join(tool_names)}")
                 logger.info(f"Tools invoked: {tool_names}")
             
-            state["messages"].append(user_message)
-            state["messages"].append(response)
+            # Return both messages to be added
+            return {"messages": [user_message, response]}
             
         except Exception as e:
             logger.error(f"Agent node error: {e}")
             error_msg = AIMessage(content=f"I encountered an error: {str(e)}. Please try again.")
-            state["messages"].append(user_message)
-            state["messages"].append(error_msg)
             print(f"\nError: {str(e)}")
-        
-        return state
+            return {"messages": [user_message, error_msg]}
     
     def route_agent(state: AgentState) -> Literal["use_tools", "continue_chat", "end"]:
         """Intelligent routing based on message history"""
@@ -351,10 +402,9 @@ def build_agent_graph(config: AgentConfig) -> StateGraph:
             # Check if tool_calls exists AND is not empty
             tool_calls = getattr(last_message, 'tool_calls', None)
             has_tool_calls = tool_calls is not None and len(tool_calls) > 0
-            logger.info(f"AIMessage has tool_calls: {tool_calls}")
             
             if has_tool_calls:
-                tool_names = [tc.get('name', 'unknown') if isinstance(tc, dict) else tc['name'] for tc in tool_calls]
+                tool_names = [tc.get('name', 'unknown') if isinstance(tc, dict) else getattr(tc, 'name', 'unknown') for tc in tool_calls]
                 logger.info(f"ROUTING TO TOOLS: {tool_names}")
                 return "use_tools"
         
