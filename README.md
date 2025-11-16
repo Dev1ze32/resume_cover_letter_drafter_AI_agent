@@ -1,107 +1,73 @@
-# 📄 DRAFTER - Resume & Cover Letter Assistant
+# 📝 Drafter
 
-my first langchain-langgraph project
-
-A conversational AI agent that helps you create professional resumes and cover letters through natural dialogue.
+A conversational AI assistant that helps you create ATS-optimized resumes and cover letters using OpenAI and LangGraph.
 
 ## ✨ Features
 
-- **Smart Resume Generation** - Creates professional resumes from your information
-- **Personalized Cover Letters** - Tailors cover letters to specific jobs and companies
-- **Document Updates** - Modify sections of your documents
-- **Auto-Save** - Saves your documents to text files
-- **Taglish Support** - Understands English and Philippine dialects
+- **Interactive Resume Creation** - Conversational interface to gather your information
+- **ATS Optimization** - Tailors your resume to specific job descriptions
+- **Cover Letter Generation** - Creates personalized cover letters for target positions
+- **Document Management** - Preview, update, and save documents as DOCX files
+- **Version Control** - Automatic versioning of all document changes
+- **Bilingual Support** - Works with English and Taglish
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
+- Python 3.8 or higher
+- OpenAI API key
+
+### Installation
+
+1. **Clone the repository**
 ```bash
-pip install langchain langchain-openai langgraph python-dotenv
+git clone https://github.com/yourusername/drafter.git
+cd drafter
 ```
 
-### Setup
-
-1. Create a `.env` file:
-```
-OPENAI_MODEL=gpt-4.0mini
-OPENAI_API_KEY=your_api_key_here
-```
-
-2. Create a `prompts.py` file with these functions:
-   - `get_resume_prompt(name, title, summary, experience, education, skills)`
-   - `get_cover_letter_prompt(name, title, summary, experience, education, skills, job_title, company, tone)`
-   - `get_main_reply_prompt()`
-   - prompts already in inside
-
-3. Run the agent:
+2. **Install dependencies**
 ```bash
-python drafter_agent.py
+pip install -r requirements.txt
 ```
 
-## 💬 Usage Example
+3. **Set up environment variables**
 
-```
-You: I need a resume
-
-AI: Sure! I'll need some details:
-- Name:
-- Job Title:
-- Summary:
-- Experience:
-- Education:
-- Skills:
-
-You: [Provide your information]
-
-AI: [Creates resume]
-
-You: Update the experience section
-
-AI: [Updates the section]
-
-You: Save it
-
-AI: ✓ Saved successfully
-  • Resume → resume.txt
+Create a `.env` file in the project root:
+```env
+OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_MODEL=gpt-4o-mini
 ```
 
-## 🛠️ Available Tools
+4. **Run the application**
+```bash
+python main.py
+```
 
-| Tool | Description |
-|------|-------------|
-| `create_resume` | Generates a professional resume |
-| `create_cover_letter` | Creates a tailored cover letter |
-| `update` | Modifies document sections |
-| `save` | Saves documents to files |
+## 📦 Dependencies
 
-## 📁 Output Files
+```
+python-dotenv
+langchain-openai
+langchain-core
+langgraph
+python-docx
+```
 
-- **resume.txt** - Your generated resume
-- **letter.txt** - Your cover letter
-- can tell ai the name of txt
+Install all at once:
+```bash
+pip install python-dotenv langchain-openai langchain-core langgraph python-docx
+```
 
-## 🎯 Design Philosophy
+## 💡 Usage
 
-- **Conversational First** - Natural dialogue, not forms
-- **Smart Clarification** - Asks for missing details before generating
-- **Focused Purpose** - Only handles resume/cover letter tasks
-- **No Assumptions** - Never invents information
+### Basic Workflow
 
-## 🔒 Guardrails
+1. **Start the assistant**
+```bash
+python drafter_agentv2.py
+```
 
-DRAFTER is strictly focused on professional documents. It will politely decline:
-- Programming help
-- General knowledge questions
-- Unrelated tasks
-
-## 📝 Notes
-
-- Documents are stored in memory during the session
-- The agent asks clarifying questions for vague information
-- Supports custom tones for cover letters (e.g., formal, enthusiastic)
-- Auto-saves with default filenames unless specified
-
----
-
-**Made with LangChain + LangGraph** 🦜🕸️
+2. **Create a resume**
+```
+💬 You: make me a resume
